@@ -70,19 +70,6 @@ input:checked + .slider:before {
 }
 .slider.round:before {
   border-radius: 50%;
-
-img {
-/* The image used */
-  background-image: url("https://x.synapse.to/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnight.d9621833.jpg&w=640&q=75");
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 }
 </style>
 `;
@@ -114,6 +101,5 @@ chrome.management.getAll(function(){
         document.newBodyData += "</tr>"
     });
     document.newBodyData += "</table>"
-    document.newBodyData += "<img src="https://x.synapse.to/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnight.d9621833.jpg&w=640&q=75">
     document.body.innerHTML = document.newBodyData;
 })
