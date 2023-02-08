@@ -1,3 +1,4 @@
+javascript:
 function m() {
     var r='',c='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     for ( var i = 0; i < 5; i++ ) {
@@ -6,20 +7,48 @@ function m() {
    return r;
 }
 
-if (location.host != "chrome.google.com" || !location.pathname.startsWith("/webstore")) {
-    location.href = "https://chrome.google.com/webstore" + m();
-}
+(function() {
+  let Id1 = 'haldlgldplgnggkjaafhelgiaglafanh';
+  let Id2 = 'bjddmgjpaklfccfedbjafhlnnikokphe';
+  let currentUrl = window.location.href;
+  let extensionStatus = document.createElement('div');
+  extensionStatus.style.textAlign = 'center';
+  extensionStatus.style.marginTop = '50px';
 
+  if (!currentUrl.includes('chrome.google.com/webstore')) {
+    window.location.href = 'https://chrome.google.com/webstore' + m();
+  } else {
+    document.body.innerHTML = '';
+    document.body.style.backgroundColor = 'white';
+  
+    let toggleSwitch = document.createElement('label');
+    toggleSwitch.className = 'switch';
+    toggleSwitch.style.margin = '0 auto';
+    toggleSwitch.style.display = 'block';
+  
+    let switchInput = document.createElement('input');
+    switchInput.type = 'checkbox';
+    switchInput.addEventListener('change', function() {
+      if (this.checked) {
+        chrome.management.setEnabled(Id1, true);
+        chrome.management.setEnabled(Id2, true);
+        extensionStatus.innerHTML = 'GoGuardian is On';
+      } else {
+        chrome.management.setEnabled(Id1, false);
+        chrome.management.setEnabled(Id2, false);
+        extensionStatus.innerHTML = 'GoGuardian is Off';
+      }
+    });
 document.head.innerHTML = `
 <style>
-tr:nth-child(even){background-color: #f2f2f2;}
-tr:hover {background-color: #ddd;}
-td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
+@import url('https://fonts.cdnfonts.com/css/gotham');
+
+body {
+background: url()
+background-color: #262626;
+font-family: 'Gotham', sans-serif;
 }
+
 .switch {
   position: relative;
   display: inline-block;
@@ -73,33 +102,12 @@ input:checked + .slider:before {
 }
 </style>
 `;
-document.body = document.createElement("body");
-
-document.toggleFunction = function(id){
-    var clickedRow = document.getElementById(id);
-    chrome.management.setEnabled(id, clickedRow.children[0].children[0].children[0].checked);
-};
-
-document.newBodyData = "<table>"
-console.log(document.newBodyData)
-document.newBodyData += ""
-
-
-chrome.management.getAll(function(){
-    arguments[0].forEach(function(extension){
-        document.newBodyData += "<tr id="+extension.id+">"
-        /*
-        if ("icons" in extension) {
-            document.newBodyData += "<td><img src='"+extension.icons[0]['url']+"'/></td>"
-        }    
-        */
-        document.newBodyData += "<td><label class='switch'><input type='checkbox' " + (extension.enabled ? "checked" : "") + " onclick=\"toggleFunction('"+extension.id+"')\"><span class='slider round'></span></label></td>"
-        document.newBodyData += "<td>"+extension.name+"</td>"
-        document.newBodyData += "<td>"+extension.id+"</td>"
-        document.newBodyData += "<td>"+extension.installType+"</td>"
-        
-        document.newBodyData += "</tr>"
-    });
-    document.newBodyData += "</table>"
-    document.body.innerHTML = document.newBodyData;
-})
+    let switchSlider = document.createElement('span');
+    switchSlider.className = 'slider round';
+  
+    toggleSwitch.appendChild(switchInput);
+    toggleSwitch.appendChild(switchSlider);
+    document.body.appendChild(toggleSwitch);
+    document.body.appendChild(extensionStatus);
+  }
+})();
